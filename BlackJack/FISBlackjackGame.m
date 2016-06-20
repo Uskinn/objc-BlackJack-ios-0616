@@ -24,9 +24,30 @@
 
 - (void)playBlackJack {
     
-//    [self.deck resetDeck];
-//    [self dealNewRound];
- 
+    [self.deck resetDeck];
+    [self.house resetForNewGame];
+    [self.player resetForNewGame];
+    [self dealNewRound];
+    
+    for (NSUInteger i = 0; i < 3; i++) {
+        
+        [self processPlayerTurn];
+        if (self.player.busted == YES) {
+            
+            break;
+        }
+        
+        [self processHouseTurn];
+        if (self.house.busted == YES) {
+            
+            break;
+        }
+}
+    
+    [self incrementWinsAndLossesForHouseWins:[self houseWins]];
+    
+    NSLog(@"\n\n\n\n\n Play BlackJack!\n\n\n\n%@\n\n\n\n", self.player.description);
+    NSLog(@"\n\n\n\n\n Play BlackJack!\n\n\n\n%@\n\n\n\n", self.house.description);
     
 }
 
@@ -42,14 +63,12 @@
     
     FISCard *cardToPlayer = [self.deck drawNextCard];
     [self.player acceptCard:cardToPlayer];
-    
 }
 
 - (void)dealCardToHouse {
     
     FISCard *cardToHouse = [self.deck drawNextCard];
     [self.house acceptCard:cardToHouse];
-    
 }
 
 - (void)processPlayerTurn {
